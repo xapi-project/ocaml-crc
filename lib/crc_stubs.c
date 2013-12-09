@@ -81,3 +81,17 @@ CAMLprim value crc32_cstruct(value buffer, value offset, value length) {
 
     CAMLreturn(result);
 }
+
+CAMLprim value crc32_string(value string, value offset, value length) {
+    CAMLparam3(string, offset, length);
+    CAMLlocal1(result);
+
+    unsigned char* data;
+
+    data = (unsigned char*) String_val(string);
+    data += Int_val(offset);
+
+    result = caml_copy_int32(crc32(0, data, Int_val(length)));
+
+    CAMLreturn(result);
+}
