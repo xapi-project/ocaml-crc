@@ -11,7 +11,7 @@ test:
 	obuild test --output
 
 install:
-	ocamlfind install -crc lib/META $(wildcard dist/build/lib-crc/*)
+	ocamlfind install crc lib/META $(wildcard dist/build/lib-crc/*)
 
 uninstall:
 	ocamlfind remove crc
