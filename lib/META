@@ -1,0 +1,8 @@
+version = "0.9.0"
+description = "Library for finding the CRC of parts of various kinds of data in-place"
+requires = "cstruct"
+archive(byte) = "crc.cma"
+archive(byte, plugin) = "crc.cma"
+archive(native) = "crc.cmxa"
+archive(native, plugin) = "crc.cmxa"
+exists_if = "crc.cma"

@@ -1,0 +1,16 @@
+name: crc
+version: 0.9.0
+synopsis: Library for finding the CRC of parts of various kinds of data in-place
+obuild-ver: 1
+
+library crc
+  src-dir: lib
+  modules: crc
+  build-deps: cstruct
+  cdir: lib
+  c-sources: crc_stubs.c
+
+test crc_cstruct_test
+  main: crc_cstruct_test.ml
+  src-dir: test
+  build-deps: crc, oUnit
