@@ -68,8 +68,12 @@ crc32(uint32_t crc, const void *buf, size_t size)
     return crc ^ ~0U;
 }
 
-CAMLprim value crc32_cstruct(value buffer, value offset, value length) {
-    CAMLparam3(buffer, offset, length);
+CAMLprim value crc32_cstruct(
+        value crc,
+        value buffer,
+        value offset,
+        value length) {
+    CAMLparam4(crc, buffer, offset, length);
     CAMLlocal1(result);
 
     unsigned char* data;
@@ -77,13 +81,17 @@ CAMLprim value crc32_cstruct(value buffer, value offset, value length) {
     data = (unsigned char*) Data_bigarray_val(buffer);
     data += Int_val(offset);
 
-    result = caml_copy_int32(crc32(0, data, Int_val(length)));
+    result = caml_copy_int32(crc32(Int32_val(crc), data, Int_val(length)));
 
     CAMLreturn(result);
 }
 
-CAMLprim value crc32_string(value string, value offset, value length) {
-    CAMLparam3(string, offset, length);
+CAMLprim value crc32_string(
+        value crc,
+        value string,
+        value offset,
+        value length) {
+    CAMLparam4(crc, string, offset, length);
     CAMLlocal1(result);
 
     unsigned char* data;
@@ -91,7 +99,7 @@ CAMLprim value crc32_string(value string, value offset, value length) {
     data = (unsigned char*) String_val(string);
     data += Int_val(offset);
 
-    result = caml_copy_int32(crc32(0, data, Int_val(length)));
+    result = caml_copy_int32(crc32(Int32_val(crc), data, Int_val(length)));
 
     CAMLreturn(result);
 }

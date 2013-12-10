@@ -7,19 +7,19 @@ let check_bounds buffer_length offset data_length =
 let check_bounds_cstruct t offset length =
 	check_bounds t.Cstruct.len (offset + t.Cstruct.off) length
 
-external unsafe_crc32_cstruct : Cstruct.buffer -> int -> int -> int32 =
+external unsafe_crc32_cstruct : int32 -> Cstruct.buffer -> int -> int -> int32 =
 	"crc32_cstruct"
 
-let crc32_cstruct t offset length =
+let crc32_cstruct ?(crc=0l) t offset length =
 	check_bounds_cstruct t offset length;
-	unsafe_crc32_cstruct t.Cstruct.buffer (offset + t.Cstruct.off) length
+	unsafe_crc32_cstruct crc t.Cstruct.buffer (offset + t.Cstruct.off) length
 
-external unsafe_crc32_string : string -> int -> int -> int32 =
+external unsafe_crc32_string : int32 -> string -> int -> int -> int32 =
 	"crc32_string"
 
 let check_bounds_string str offset length =
 	check_bounds (String.length str) offset length
 
-let crc32_string str offset length =
+let crc32_string ?(crc=0l) str offset length =
 	check_bounds_string str offset length;
-	unsafe_crc32_string str offset length
+	unsafe_crc32_string crc str offset length
