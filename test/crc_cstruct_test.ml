@@ -86,25 +86,25 @@ let suite_test_crc_update =
 let test_negative_length () =
 	let cstruct = Cstruct.of_string "foobar" in
 	assert_raises
-		(Invalid_argument "length")
+		Crc.Invalid_length
 		(fun () -> Crc.crc32_cstruct cstruct 2 (-5))
 
 let test_negative_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
 	assert_raises
-		(Invalid_argument "offset")
+		Crc.Invalid_offset
 		(fun () -> Crc.crc32_cstruct cstruct (-3) 4)
 
 let test_too_large_length () =
 	let cstruct = Cstruct.of_string "foobar" in
 	assert_raises
-		(Invalid_argument "length")
+		Crc.Invalid_length
 		(fun () -> Crc.crc32_cstruct cstruct 3 5)
 
 let test_too_large_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
 	assert_raises
-		(Invalid_argument "offset")
+		Crc.Invalid_offset
 		(fun () -> Crc.crc32_cstruct cstruct 7 2)
 
 let suite_test_bounds_checking =

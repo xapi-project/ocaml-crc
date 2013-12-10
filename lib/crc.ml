@@ -1,8 +1,11 @@
+exception Invalid_length
+exception Invalid_offset
+
 let check_bounds buffer_length offset data_length =
-	if offset > buffer_length then invalid_arg "offset";
-	if data_length < 0 then invalid_arg "length";
-	if offset + data_length > buffer_length then invalid_arg "length";
-	if offset < 0 then invalid_arg "offset"
+	if offset > buffer_length then raise Invalid_offset;
+	if data_length < 0 then raise Invalid_length;
+	if offset + data_length > buffer_length then raise Invalid_length;
+	if offset < 0 then raise Invalid_offset
 
 let check_bounds_cstruct t offset length =
 	check_bounds t.Cstruct.len (offset + t.Cstruct.off) length
