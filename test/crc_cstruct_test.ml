@@ -50,6 +50,39 @@ let suite_test_crc_part =
 					(fun () -> test_crc_part test_string offset length expected_crc))
 			part_crc_tests)
 
+let update_crc_tests = [
+	"", "bar", 1996459178l;
+	"bar", "", 1996459178l;
+	"bar", "baz", 385868946l;
+	"[12pl34.", ",2l3\n\t", 1481911597l;
+]
+
+let test_crc_update_string data_first data_second expected_crc =
+	let data_all = data_first ^ data_second in
+	let crc_all = Crc.crc32_string data_all 0 (String.length data_all) in
+	let crc_first = Crc.crc32_string data_first 0 (String.length data_first) in
+	let crc_parts =
+		Crc.crc32_string
+			~crc:crc_first
+			data_second 0 (String.length data_second)
+	in
+	assert_equal crc_all crc_parts
+
+let suite_test_crc_update =
+	"suite_test_crc_update" >:::
+		(List.map
+			(fun (test_string_first, test_string_second, expected_crc) ->
+				let test_name =
+					Printf.sprintf
+						"test_crc_update_string: \"%s\",\"%s\""
+						(String.escaped test_string_first)
+						(String.escaped test_string_second)
+				in
+				test_name >::
+					(fun () -> test_crc_update_string
+							test_string_first test_string_second expected_crc))
+			update_crc_tests)
+
 let test_negative_length () =
 	let cstruct = Cstruct.of_string "foobar" in
 	assert_raises
@@ -88,6 +121,7 @@ let base_suite =
 		[
 			suite_test_crc_all;
 			suite_test_crc_part;
+			suite_test_crc_update;
 			suite_test_bounds_checking;
 		]
 
