@@ -15,7 +15,7 @@ let test_crc_all_string data expected_crc =
 
 let test_crc_all_cstruct data expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let crc = Crc.crc32_cstruct cstruct 0 (String.length data) in
+	let crc = Crc.crc32_cstruct cstruct in
 	assert_equal crc expected_crc
 
 let suite_test_crc_all =
@@ -45,7 +45,7 @@ let test_crc_part_string data offset length expected_crc =
 
 let test_crc_part_cstruct data offset length expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let crc = Crc.crc32_cstruct cstruct offset length in
+	let crc = Crc.crc32_cstruct (Cstruct.sub cstruct offset length) in
 	assert_equal crc expected_crc
 
 let suite_test_crc_part =
@@ -89,11 +89,11 @@ let test_crc_update_cstruct data_first data_second expected_crc =
 	let cstruct_first = Cstruct.of_string data_first in
 	let cstruct_second = Cstruct.of_string data_second in
 	let crc_all =
-		Crc.crc32_cstruct cstruct_all 0 (length_first + length_second)
+		Crc.crc32_cstruct (Cstruct.sub cstruct_all 0 (length_first + length_second))
 	in
-	let crc_first = Crc.crc32_cstruct cstruct_first 0 length_first in
+	let crc_first = Crc.crc32_cstruct cstruct_first in
 	let crc_parts =
-		Crc.crc32_cstruct ~crc:crc_first cstruct_second 0 length_second
+		Crc.crc32_cstruct ~crc:crc_first cstruct_second
 	in
 	assert_equal crc_all crc_parts
 
@@ -119,27 +119,36 @@ let suite_test_crc_update =
 
 let test_negative_length () =
 	let cstruct = Cstruct.of_string "foobar" in
-	assert_raises
-		Crc.Invalid_length
-		(fun () -> Crc.crc32_cstruct cstruct 2 (-5))
+        try
+                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 2 (-5)) in
+                failwith "test_negative_length"
+        with
+        | Crc.Invalid_length
+        | Invalid_argument "Cstruct.sub" -> ()
 
 let test_negative_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
-	assert_raises
-		Crc.Invalid_offset
-		(fun () -> Crc.crc32_cstruct cstruct (-3) 4)
+        try
+                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct (-3) 4) in
+                failwith "test_negative_offset"
+        with Crc.Invalid_offset
+        | Invalid_argument "Cstruct.sub" -> ()
 
 let test_too_large_length () =
 	let cstruct = Cstruct.of_string "foobar" in
-	assert_raises
-		Crc.Invalid_length
-		(fun () -> Crc.crc32_cstruct cstruct 3 5)
+        try
+                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 3 5) in
+                failwith "test_too_large_length"
+        with Crc.Invalid_length
+        | Invalid_argument "Cstruct.sub" -> ()
 
 let test_too_large_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
-	assert_raises
-		Crc.Invalid_offset
-		(fun () -> Crc.crc32_cstruct cstruct 7 2)
+        try
+                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 7 2) in
+                failwith "test_too_large_offset"
+        with Crc.Invalid_offset
+        | Invalid_argument "Cstruct.sub" -> ()
 
 let suite_test_bounds_checking =
 	"suite_test_bounds_checking" >:::
