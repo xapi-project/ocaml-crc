@@ -82,20 +82,40 @@ let test_crc_update_string data_first data_second expected_crc =
 	in
 	assert_equal crc_all crc_parts
 
+let test_crc_update_cstruct data_first data_second expected_crc =
+	let length_first = String.length data_first in
+	let length_second = String.length data_second in
+	let cstruct_all = Cstruct.of_string (data_first ^ data_second) in
+	let cstruct_first = Cstruct.of_string data_first in
+	let cstruct_second = Cstruct.of_string data_second in
+	let crc_all =
+		Crc.crc32_cstruct cstruct_all 0 (length_first + length_second)
+	in
+	let crc_first = Crc.crc32_cstruct cstruct_first 0 length_first in
+	let crc_parts =
+		Crc.crc32_cstruct ~crc:crc_first cstruct_second 0 length_second
+	in
+	assert_equal crc_all crc_parts
+
 let suite_test_crc_update =
-	"suite_test_crc_update" >:::
-		(List.map
+	let make_tests test_fn test_base_name =
+		List.map
 			(fun (test_string_first, test_string_second, expected_crc) ->
 				let test_name =
 					Printf.sprintf
-						"test_crc_update_string: \"%s\",\"%s\""
+						"%s: \"%s\",\"%s\""
+						test_base_name
 						(String.escaped test_string_first)
 						(String.escaped test_string_second)
 				in
 				test_name >::
 					(fun () -> test_crc_update_string
 							test_string_first test_string_second expected_crc))
-			update_crc_tests)
+			update_crc_tests
+	in
+	"suite_test_crc_update" >:::
+		((make_tests test_crc_update_string "test_crc_update_string") @
+		(make_tests test_crc_update_cstruct "test_crc_update_cstruct"))
 
 let test_negative_length () =
 	let cstruct = Cstruct.of_string "foobar" in
