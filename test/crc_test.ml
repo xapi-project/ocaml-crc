@@ -152,37 +152,20 @@ let suite_test_crc_update =
 		(make_tests test_crc_update_cstruct "test_crc_update_cstruct"))
 
 let test_negative_length () =
-	let cstruct = Cstruct.of_string "foobar" in
-        try
-                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 2 (-5)) in
-                failwith "test_negative_length"
-        with
-        | Crc.Invalid_length
-        | Invalid_argument "Cstruct.sub" -> ()
+        assert_raises Crc.Invalid_length
+                (fun () -> Crc32.string "foobar" 2 (-5))
 
 let test_negative_offset () =
-	let cstruct = Cstruct.of_string "foobar" in
-        try
-                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct (-3) 4) in
-                failwith "test_negative_offset"
-        with Crc.Invalid_offset
-        | Invalid_argument "Cstruct.sub" -> ()
+        assert_raises Crc.Invalid_offset
+                (fun () -> Crc32.string "foobar" (-3) 4)
 
 let test_too_large_length () =
-	let cstruct = Cstruct.of_string "foobar" in
-        try
-                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 3 5) in
-                failwith "test_too_large_length"
-        with Crc.Invalid_length
-        | Invalid_argument "Cstruct.sub" -> ()
+        assert_raises Crc.Invalid_length
+                (fun () -> Crc32.string "foobar" 3 5)
 
 let test_too_large_offset () =
-	let cstruct = Cstruct.of_string "foobar" in
-        try
-                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 7 2) in
-                failwith "test_too_large_offset"
-        with Crc.Invalid_offset
-        | Invalid_argument "Cstruct.sub" -> ()
+        assert_raises Crc.Invalid_offset
+                (fun () -> Crc32.string "foobar" 7 2)
 
 let suite_test_bounds_checking =
 	"suite_test_bounds_checking" >:::
