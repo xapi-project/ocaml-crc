@@ -1,0 +1,3 @@
+trunk (unreleased)
+* initial CRC-32 implementation which agrees with ZIP, python binascii
+  etc.
