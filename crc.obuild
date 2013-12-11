@@ -10,7 +10,7 @@ library crc
   cdir: lib
   c-sources: crc_stubs.c
 
-test crc_cstruct_test
-  main: crc_cstruct_test.ml
+test crc_test
+  main: crc_test.ml
   src-dir: test
   build-deps: crc, oUnit
