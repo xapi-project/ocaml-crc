@@ -17,6 +17,22 @@
 open OUnit
 open Crc
 
+(* Expected CRCs with an unusual initial value (from LVM) *)
+let full_crc_tests_from_lvm = [
+        "hello world", Int32.neg 375048304l;
+        "LVM uses CRC-32", 1179429198l;
+]
+
+let lvm_crc32 x =
+        (* LVM2's CRC is different for no good reason *)
+        let crc = Int32.logxor 0xf597a6cfl (-1l) in
+        let y = Crc32.string ~crc x 0 (String.length x) in
+        Int32.logxor y (-1l)
+
+let test_crc_from_lvm data expected_crc =
+        let crc = lvm_crc32 data in
+        assert_equal ~printer:Int32.to_string expected_crc crc
+
 (* Expected CRCs calculated using python's zlib.crc32. *)
 let full_crc_tests = [
 	"", 0l;
@@ -28,15 +44,15 @@ let full_crc_tests = [
 
 let test_crc_all_string data expected_crc =
 	let crc = Crc32.string data 0 (String.length data) in
-	assert_equal crc expected_crc
+	assert_equal ~printer:Int32.to_string expected_crc crc
 
 let test_crc_all_cstruct data expected_crc =
 	let cstruct = Cstruct.of_string data in
 	let crc = Crc32.cstruct cstruct in
-	assert_equal crc expected_crc
+	assert_equal ~printer:Int32.to_string expected_crc crc
 
 let suite_test_crc_all =
-	let make_tests test_fn test_base_name =
+	let make_tests tests test_fn test_base_name =
 		List.map
 			(fun (test_string, expected_crc) ->
 				let test_name =
@@ -44,11 +60,12 @@ let suite_test_crc_all =
 						"%s: \"%s\"" test_base_name (String.escaped test_string)
 				in
 				test_name >:: (fun () -> test_fn test_string expected_crc))
-			full_crc_tests
+			tests
 	in
 	"suite_test_crc_all" >:::
-		((make_tests test_crc_all_string "test_crc_all_string") @
-		(make_tests test_crc_all_cstruct "test_crc_all_cstruct"))
+		((make_tests full_crc_tests test_crc_all_string "test_crc_all_string") @
+		(make_tests full_crc_tests test_crc_all_cstruct "test_crc_all_cstruct") @
+                (make_tests full_crc_tests_from_lvm test_crc_from_lvm "test_crc_from_lvm"))
 
 let part_crc_tests = [
 	"foobarbaz", 5, 0, 0l;
