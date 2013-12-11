@@ -1,4 +1,5 @@
 open OUnit
+open Crc
 
 (* Expected CRCs calculated using python's zlib.crc32. *)
 let full_crc_tests = [
@@ -10,12 +11,12 @@ let full_crc_tests = [
 ]
 
 let test_crc_all_string data expected_crc =
-	let crc = Crc.crc32_string data 0 (String.length data) in
+	let crc = Crc32.string data 0 (String.length data) in
 	assert_equal crc expected_crc
 
 let test_crc_all_cstruct data expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let crc = Crc.crc32_cstruct cstruct in
+	let crc = Crc32.cstruct cstruct in
 	assert_equal crc expected_crc
 
 let suite_test_crc_all =
@@ -40,12 +41,12 @@ let part_crc_tests = [
 ]
 
 let test_crc_part_string data offset length expected_crc =
-	let crc = Crc.crc32_string data offset length in
+	let crc = Crc32.string data offset length in
 	assert_equal crc expected_crc
 
 let test_crc_part_cstruct data offset length expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let crc = Crc.crc32_cstruct (Cstruct.sub cstruct offset length) in
+	let crc = Crc32.cstruct (Cstruct.sub cstruct offset length) in
 	assert_equal crc expected_crc
 
 let suite_test_crc_part =
@@ -73,10 +74,10 @@ let update_crc_tests = [
 
 let test_crc_update_string data_first data_second expected_crc =
 	let data_all = data_first ^ data_second in
-	let crc_all = Crc.crc32_string data_all 0 (String.length data_all) in
-	let crc_first = Crc.crc32_string data_first 0 (String.length data_first) in
+	let crc_all = Crc32.string data_all 0 (String.length data_all) in
+	let crc_first = Crc32.string data_first 0 (String.length data_first) in
 	let crc_parts =
-		Crc.crc32_string
+		Crc32.string
 			~crc:crc_first
 			data_second 0 (String.length data_second)
 	in
@@ -89,11 +90,11 @@ let test_crc_update_cstruct data_first data_second expected_crc =
 	let cstruct_first = Cstruct.of_string data_first in
 	let cstruct_second = Cstruct.of_string data_second in
 	let crc_all =
-		Crc.crc32_cstruct (Cstruct.sub cstruct_all 0 (length_first + length_second))
+		Crc32.cstruct (Cstruct.sub cstruct_all 0 (length_first + length_second))
 	in
-	let crc_first = Crc.crc32_cstruct cstruct_first in
+	let crc_first = Crc32.cstruct cstruct_first in
 	let crc_parts =
-		Crc.crc32_cstruct ~crc:crc_first cstruct_second
+		Crc32.cstruct ~crc:crc_first cstruct_second
 	in
 	assert_equal crc_all crc_parts
 
@@ -120,7 +121,7 @@ let suite_test_crc_update =
 let test_negative_length () =
 	let cstruct = Cstruct.of_string "foobar" in
         try
-                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 2 (-5)) in
+                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 2 (-5)) in
                 failwith "test_negative_length"
         with
         | Crc.Invalid_length
@@ -129,7 +130,7 @@ let test_negative_length () =
 let test_negative_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
         try
-                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct (-3) 4) in
+                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct (-3) 4) in
                 failwith "test_negative_offset"
         with Crc.Invalid_offset
         | Invalid_argument "Cstruct.sub" -> ()
@@ -137,7 +138,7 @@ let test_negative_offset () =
 let test_too_large_length () =
 	let cstruct = Cstruct.of_string "foobar" in
         try
-                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 3 5) in
+                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 3 5) in
                 failwith "test_too_large_length"
         with Crc.Invalid_length
         | Invalid_argument "Cstruct.sub" -> ()
@@ -145,7 +146,7 @@ let test_too_large_length () =
 let test_too_large_offset () =
 	let cstruct = Cstruct.of_string "foobar" in
         try
-                let (_: int32) = Crc.crc32_cstruct (Cstruct.sub cstruct 7 2) in
+                let (_: int32) = Crc32.cstruct (Cstruct.sub cstruct 7 2) in
                 failwith "test_too_large_offset"
         with Crc.Invalid_offset
         | Invalid_argument "Cstruct.sub" -> ()
