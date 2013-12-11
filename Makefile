@@ -1,17 +1,32 @@
-.PHONY: clean test install uninstall
+all: build
 
-dist/build/lib-crc/crc.cmxa:
-	obuild configure --enable-tests
-	obuild build
+TESTS_FLAG=--enable-tests
 
-clean:
-	rm -rf dist
+NAME=crc
+J=4
 
-test:
-	obuild test --output
+setup.ml: _oasis
+	oasis setup
 
-install:
-	ocamlfind install crc lib/META $(wildcard dist/build/lib-crc/*)
+setup.data: setup.ml
+	ocaml setup.ml -configure $(TESTS_FLAG)
+
+build: setup.data setup.ml
+	ocaml setup.ml -build -j $(J)
+
+install: setup.data setup.ml
+	ocaml setup.ml -install
 
 uninstall:
-	ocamlfind remove crc
+	ocamlfind remove $(NAME)
+
+test: setup.ml build
+	ocaml setup.ml -test
+
+reinstall: setup.ml
+	ocamlfind remove $(NAME) || true
+	ocaml setup.ml -reinstall
+
+clean:
+	ocamlbuild -clean
+	rm -f setup.data setup.log

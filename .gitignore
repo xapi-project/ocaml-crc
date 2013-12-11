@@ -1,4 +1,8 @@
 *.swp
 
-dist
+_build
 oUnit-anon.cache
+setup.data
+setup.log
+
+crc_test.byte

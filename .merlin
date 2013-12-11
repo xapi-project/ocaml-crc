@@ -2,5 +2,5 @@ PKG cstruct oUnit
 S lib
 S test
 
-B dist/build/lib-crc
-B dist/build/crc_cstruct_test
+B _build/lib
+B _build/test
