@@ -19,19 +19,19 @@ open Crc
 
 (* Expected CRCs with an unusual initial value (from LVM) *)
 let full_crc_tests_from_lvm = [
-        "hello world", Int32.neg 375048304l;
-        "LVM uses CRC-32", 1179429198l;
+	"hello world", Int32.neg 375048304l;
+	"LVM uses CRC-32", 1179429198l;
 ]
 
 let lvm_crc32 x =
-        (* LVM2's CRC is different for no good reason *)
-        let crc = Int32.logxor 0xf597a6cfl (-1l) in
-        let y = Crc32.string ~crc x 0 (String.length x) in
-        Int32.logxor y (-1l)
+	(* LVM2's CRC is different for no good reason *)
+	let crc = Int32.logxor 0xf597a6cfl (-1l) in
+	let y = Crc32.string ~crc x 0 (String.length x) in
+	Int32.logxor y (-1l)
 
 let test_crc_from_lvm data expected_crc =
-        let crc = lvm_crc32 data in
-        assert_equal ~printer:Int32.to_string expected_crc crc
+	let crc = lvm_crc32 data in
+	assert_equal ~printer:Int32.to_string expected_crc crc
 
 (* Expected CRCs calculated using python's zlib.crc32. *)
 let full_crc_tests = [
@@ -152,20 +152,20 @@ let suite_test_crc_update =
 		(make_tests test_crc_update_cstruct "test_crc_update_cstruct"))
 
 let test_negative_length () =
-        assert_raises Crc.Invalid_length
-                (fun () -> Crc32.string "foobar" 2 (-5))
+	assert_raises Crc.Invalid_length
+		(fun () -> Crc32.string "foobar" 2 (-5))
 
 let test_negative_offset () =
-        assert_raises Crc.Invalid_offset
-                (fun () -> Crc32.string "foobar" (-3) 4)
+	assert_raises Crc.Invalid_offset
+		(fun () -> Crc32.string "foobar" (-3) 4)
 
 let test_too_large_length () =
-        assert_raises Crc.Invalid_length
-                (fun () -> Crc32.string "foobar" 3 5)
+	assert_raises Crc.Invalid_length
+		(fun () -> Crc32.string "foobar" 3 5)
 
 let test_too_large_offset () =
-        assert_raises Crc.Invalid_offset
-                (fun () -> Crc32.string "foobar" 7 2)
+	assert_raises Crc.Invalid_offset
+		(fun () -> Crc32.string "foobar" 7 2)
 
 let suite_test_bounds_checking =
 	"suite_test_bounds_checking" >:::
