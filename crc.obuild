@@ -13,4 +13,4 @@ library crc
 test crc_test
   main: crc_test.ml
   src-dir: test
-  build-deps: crc, oUnit
+  build-deps: crc, oUnit, unix
