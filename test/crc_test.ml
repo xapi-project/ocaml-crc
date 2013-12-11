@@ -39,23 +39,30 @@ let part_crc_tests = [
 	"lmn\\\n\\xyzopq", 3, 6, 355115745l;
 ]
 
-let test_crc_part data offset length expected_crc =
+let test_crc_part_string data offset length expected_crc =
+	let crc = Crc.crc32_string data offset length in
+	assert_equal crc expected_crc
+
+let test_crc_part_cstruct data offset length expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let cstruct_crc = Crc.crc32_cstruct cstruct offset length in
-	assert_equal cstruct_crc expected_crc
+	let crc = Crc.crc32_cstruct cstruct offset length in
+	assert_equal crc expected_crc
 
 let suite_test_crc_part =
-	"suite_test_crc_part" >:::
-		(List.map
+	let make_tests test_fn test_base_name =
+		List.map
 			(fun (test_string, offset, length, expected_crc) ->
 				let test_name =
 					Printf.sprintf
-						"test_crc_part: \"%s\""
-						(String.escaped test_string)
+						"%s: \"%s\"" test_base_name (String.escaped test_string)
 				in
 				test_name >::
-					(fun () -> test_crc_part test_string offset length expected_crc))
-			part_crc_tests)
+					(fun () -> test_fn test_string offset length expected_crc))
+			part_crc_tests
+	in
+	"suite_test_crc_part" >:::
+		((make_tests test_crc_part_string "test_crc_part_string") @
+		(make_tests test_crc_part_cstruct "test_crc_part_cstruct"))
 
 let update_crc_tests = [
 	"", "bar", 1996459178l;
