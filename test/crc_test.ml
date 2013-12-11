@@ -9,22 +9,29 @@ let full_crc_tests = [
 	"\\\n\\xyz", 355115745l;
 ]
 
-let test_crc_all data expected_crc =
+let test_crc_all_string data expected_crc =
+	let crc = Crc.crc32_string data 0 (String.length data) in
+	assert_equal crc expected_crc
+
+let test_crc_all_cstruct data expected_crc =
 	let cstruct = Cstruct.of_string data in
-	let cstruct_crc = Crc.crc32_cstruct cstruct 0 (String.length data) in
-	assert_equal cstruct_crc expected_crc
+	let crc = Crc.crc32_cstruct cstruct 0 (String.length data) in
+	assert_equal crc expected_crc
 
 let suite_test_crc_all =
-	"suite_test_crc_all" >:::
-		(List.map
+	let make_tests test_fn test_base_name =
+		List.map
 			(fun (test_string, expected_crc) ->
 				let test_name =
 					Printf.sprintf
-						"test_crc_all: \"%s\""
-						(String.escaped test_string)
+						"%s: \"%s\"" test_base_name (String.escaped test_string)
 				in
-				test_name >:: (fun () -> test_crc_all test_string expected_crc))
-			full_crc_tests)
+				test_name >:: (fun () -> test_fn test_string expected_crc))
+			full_crc_tests
+	in
+	"suite_test_crc_all" >:::
+		((make_tests test_crc_all_string "test_crc_all_string") @
+		(make_tests test_crc_all_cstruct "test_crc_all_cstruct"))
 
 let part_crc_tests = [
 	"foobarbaz", 5, 0, 0l;
