@@ -27,14 +27,14 @@ let check_bounds buffer_length offset data_length =
 let check_bounds_cstruct t =
 	check_bounds (Bigarray.Array1.dim t.Cstruct.buffer) t.Cstruct.off t.Cstruct.len
 
+let check_bounds_string str offset length =
+	check_bounds (String.length str) offset length
+
 external unsafe_crc32_cstruct : int32 -> Cstruct.buffer -> int -> int -> int32 =
 	"crc32_cstruct"
 
 external unsafe_crc32_string : int32 -> string -> int -> int -> int32 =
 	"crc32_string"
-
-let check_bounds_string str offset length =
-	check_bounds (String.length str) offset length
 
 module Crc32 = struct
 	let cstruct ?(crc=0l) t =
