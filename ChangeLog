@@ -1,3 +1,2 @@
-trunk (unreleased)
-* initial CRC-32 implementation which agrees with ZIP, python binascii
-  etc.
+0.9.0 (2013-12-12)
+ * initial CRC-32 implementation which agrees with ZIP, python binascii etc.
