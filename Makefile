@@ -5,6 +5,8 @@ TESTS_FLAG=--enable-tests
 NAME=crc
 J=4
 
+LIBDIR=_build/lib
+
 setup.ml: _oasis
 	oasis setup
 
@@ -21,7 +23,8 @@ uninstall:
 	ocamlfind remove $(NAME)
 
 test: setup.ml build
-	ocaml setup.ml -test
+	LD_LIBRARY_PATH=$(LIBDIR):$(LD_LIBRARY_PATH) ./crc_test.byte
+#	ocaml setup.ml -test
 
 reinstall: setup.ml
 	ocamlfind remove $(NAME) || true
