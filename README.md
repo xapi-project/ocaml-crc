@@ -1,7 +1,7 @@
 CRC implementation for OCaml
 ============================
 
-[![Build status](https://travis-ci.org/johnelse/ocaml-crc.png?branch=master)](https://travis-ci.org/johnelse/ocaml-crc)
+[![Build status](https://travis-ci.org/xapi-project/ocaml-crc.png?branch=master)](https://travis-ci.org/project/ocaml-crc)
 
 This library allows you to compute CRC-32 checksums of buffers
 and strings e.g.
