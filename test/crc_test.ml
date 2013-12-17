@@ -117,13 +117,10 @@ let test_crc_update_string data_first data_second expected_crc =
 	assert_equal crc_all crc_parts
 
 let test_crc_update_cstruct data_first data_second expected_crc =
-	let length_first = String.length data_first in
-	let length_second = String.length data_second in
 	let cstruct_all = Cstruct.of_string (data_first ^ data_second) in
 	let cstruct_first = Cstruct.of_string data_first in
 	let cstruct_second = Cstruct.of_string data_second in
-	let crc_all =
-		Crc32.cstruct (Cstruct.sub cstruct_all 0 (length_first + length_second))
+	let crc_all = Crc32.cstruct cstruct_all
 	in
 	let crc_first = Crc32.cstruct cstruct_first in
 	let crc_parts =
