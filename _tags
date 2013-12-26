@@ -36,3 +36,4 @@
 <test/*.ml{,i}>: pkg_oUnit
 <test/*.ml{,i}>: pkg_cstruct
 # OASIS_STOP
+<lib>: include

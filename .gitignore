@@ -1,5 +1,6 @@
 *.swp
 
+api.docdir
 _build
 oUnit-anon.cache
 setup.data
