@@ -29,3 +29,11 @@ Executable crc_test
 Test crc_test
   Command: $crc_test
   WorkingDirectory: test
+
+Document api
+  Title: CRC library documentation and API reference
+  Type: ocamlbuild (0.3)
+  BuildTools+: ocamldoc
+  XOcamlbuildModules: Crc
+  XOcamlbuildPath: doc
+  Install: false

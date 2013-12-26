@@ -28,4 +28,5 @@ opam install ${OPAM_PACKAGES}
 
 eval `opam config -env`
 make
+make doc
 make test
