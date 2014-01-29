@@ -65,7 +65,7 @@ let suite_test_crc_all =
 	"suite_test_crc_all" >:::
 		((make_tests full_crc_tests test_crc_all_string "test_crc_all_string") @
 		(make_tests full_crc_tests test_crc_all_cstruct "test_crc_all_cstruct") @
-                (make_tests full_crc_tests_from_lvm test_crc_from_lvm "test_crc_from_lvm"))
+		(make_tests full_crc_tests_from_lvm test_crc_from_lvm "test_crc_from_lvm"))
 
 let part_crc_tests = [
 	"foobarbaz", 5, 0, 0l;
@@ -108,24 +108,25 @@ let update_crc_tests = [
 let test_crc_update_string data_first data_second expected_crc =
 	let data_all = data_first ^ data_second in
 	let crc_all = Crc32.string data_all 0 (String.length data_all) in
+
 	let crc_first = Crc32.string data_first 0 (String.length data_first) in
 	let crc_parts =
 		Crc32.string
 			~crc:crc_first
 			data_second 0 (String.length data_second)
 	in
+
 	assert_equal crc_all crc_parts
 
 let test_crc_update_cstruct data_first data_second expected_crc =
 	let cstruct_all = Cstruct.of_string (data_first ^ data_second) in
 	let cstruct_first = Cstruct.of_string data_first in
 	let cstruct_second = Cstruct.of_string data_second in
-	let crc_all = Crc32.cstruct cstruct_all
-	in
+
+	let crc_all = Crc32.cstruct cstruct_all in
 	let crc_first = Crc32.cstruct cstruct_first in
-	let crc_parts =
-		Crc32.cstruct ~crc:crc_first cstruct_second
-	in
+	let crc_parts = Crc32.cstruct ~crc:crc_first cstruct_second in
+
 	assert_equal crc_all crc_parts
 
 let suite_test_crc_update =
