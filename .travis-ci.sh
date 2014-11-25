@@ -26,7 +26,7 @@ opam --git-version
 
 opam init
 eval `opam config env`
-opam pin add crc $PWD
+opam pin add crc $PWD -n
 opam install crc --deps-only
 
 make
