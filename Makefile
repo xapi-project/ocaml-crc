@@ -7,9 +7,6 @@ J=4
 
 LIBDIR=_build/lib
 
-setup.ml: _oasis
-	oasis setup
-
 setup.data: setup.ml
 	ocaml setup.ml -configure $(TESTS_FLAG)
 
