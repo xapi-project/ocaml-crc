@@ -4,6 +4,7 @@ build: [
   [make]
 ]
 build-test: [
+  [make "doc"]
   [make "test"]
 ]
 install: [
