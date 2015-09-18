@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: bc9799689c845c1d28cc78f54af3c5ed)
+# DO NOT EDIT (digest: 1581093f9158957a7da223ebed357a83)
 version = "0.9.0"
 description = "CRC library for computing checksums of buffers and strings"
 requires = "cstruct"
@@ -7,6 +7,16 @@ archive(byte) = "crc.cma"
 archive(byte, plugin) = "crc.cma"
 archive(native) = "crc.cmxa"
 archive(native, plugin) = "crc.cmxs"
+xen_linkopts = "-lcrc_xen_stubs"
 exists_if = "crc.cma"
+package "xen" (
+ version = "0.9.0"
+ description = "CRC library for computing checksums of buffers and strings"
+ archive(byte) = "crc_xen.cma"
+ archive(byte, plugin) = "crc_xen.cma"
+ archive(native) = "crc_xen.cmxa"
+ archive(native, plugin) = "crc_xen.cmxs"
+ exists_if = "crc_xen.cma"
+)
 # OASIS_STOP
 

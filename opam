@@ -5,6 +5,7 @@ bug-reports: "https://github.com/xapi-project/ocaml-crc/issues"
 dev-repo: "git://github.com/xapi-project/ocaml-crc"
 maintainer: "john.else@citrix.com"
 build: [
+  ["ocaml" "setup.ml" "-configure" "--%{mirage-xen:enable}%-xen"]
   [make]
 ]
 build-test: [
@@ -20,5 +21,8 @@ depends: [
   "cstruct" {>= "1.0.1"}
   "ounit"
   "ocamlbuild" {build}
+]
+depopts: [
+  "mirage-xen"
 ]
 available: [ ocaml-version >= "4.00.1"]

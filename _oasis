@@ -7,6 +7,11 @@ License:      ISC
 Copyrights:   (C) 2013 John Else
 BuildTools:   ocamlbuild
 Plugins:      META (0.3)
+PostConfCommand: ocaml postconf.ml
+
+Flag xen
+  Description:        Build Xen support
+  Default:            false
 
 Library crc
   Path: lib
@@ -16,6 +21,15 @@ Library crc
   Modules: Crc
   CSources: crc_stubs.c
   BuildDepends: cstruct
+  XMETAExtraLines: xen_linkopts = "-lcrc_xen_stubs"
+ 
+Library crc_xen
+  Build$:        flag(xen)
+  Path:          lib
+  CSources: 	 crc_stubs_xen.c
+  Findlibparent: crc
+  Findlibname:   xen
+  CCOpt:         -O2 $XEN_CFLAGS
 
 Executable crc_test
   Build$: flag(tests)
