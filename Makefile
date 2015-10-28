@@ -23,7 +23,7 @@ uninstall:
 	ocamlfind remove $(NAME)
 
 test: setup.ml build
-	LD_LIBRARY_PATH=$(LIBDIR):$(LD_LIBRARY_PATH) ./crc_test.byte
+	LD_LIBRARY_PATH=$(LIBDIR):$(LD_LIBRARY_PATH) ./crc_test.byte -runner sequential
 #	ocaml setup.ml -test
 
 reinstall: setup.ml
