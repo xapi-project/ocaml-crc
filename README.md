@@ -1,5 +1,8 @@
-ocaml-crc [![Build status](https://travis-ci.org/xapi-project/ocaml-crc.png?branch=master)](https://travis-ci.org/xapi-project/ocaml-crc)
+ocaml-crc
 =========
+
+[![Build status](https://travis-ci.org/xapi-project/ocaml-crc.png?branch=master)](https://travis-ci.org/xapi-project/ocaml-crc)
+[![Coverage Status](https://coveralls.io/repos/xapi-project/ocaml-crc/badge.svg?branch=master)](https://coveralls.io/r/xapi-project/ocaml-crc?branch=master)
 
 This library allows you to compute CRC-32 checksums of buffers
 and strings e.g.
