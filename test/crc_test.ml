@@ -141,7 +141,7 @@ let suite_test_crc_update =
 						(String.escaped test_string_second)
 				in
 				test_name >::
-					(fun () -> test_crc_update_string
+					(fun () -> test_fn
 							test_string_first test_string_second expected_crc))
 			update_crc_tests
 	in
