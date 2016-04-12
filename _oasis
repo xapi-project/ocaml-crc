@@ -15,7 +15,6 @@ Library crc
   NativeOpt: -bin-annot
   Modules: Crc
   CSources: crc_stubs.c
-  XMETAExtraLines: xen_linkopts = "-lcrc_stubs"
   BuildDepends: cstruct
 
 Executable crc_test
