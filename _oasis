@@ -22,7 +22,7 @@ Library crc
   CSources: crc_stubs.c
   BuildDepends: cstruct
   XMETAExtraLines: xen_linkopts = "-lcrc_xen_stubs"
- 
+
 Library crc_xen
   Build$:        flag(xen)
   Path:          lib
