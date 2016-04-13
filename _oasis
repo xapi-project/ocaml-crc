@@ -1,6 +1,6 @@
 OASISFormat:  0.3
 Name:         crc
-Version:      0.9.0
+Version:      0.9.9
 Synopsis:     CRC library for computing checksums of buffers and strings
 Authors:      John Else
 License:      ISC
