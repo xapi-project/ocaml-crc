@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 718e1721d69184406a2c404486b786cf) *)
+(* DO NOT EDIT (digest: aafb3b64d96502fccf02cdbe97abf4b0) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -607,8 +607,9 @@ end
 open Ocamlbuild_plugin;;
 let package_default =
   {
-     MyOCamlbuildBase.lib_ocaml = [("crc", ["lib"], [])];
-     lib_c = [("crc", "lib", [])];
+     MyOCamlbuildBase.lib_ocaml =
+       [("crc", ["lib"], []); ("crc_xen", ["lib"], [])];
+     lib_c = [("crc", "lib", []); ("crc_xen", "lib", [])];
      flags =
        [
           (["oasis_library_crc_byte"; "ocaml"; "link"; "byte"],
@@ -623,6 +624,11 @@ let package_default =
             [(OASISExpr.EBool true, S [A "-bin-annot"])]);
           (["oasis_library_crc_native"; "ocaml"; "compile"; "native"],
             [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_crc_xen_ccopt"; "compile"],
+            [
+               (OASISExpr.EBool true,
+                 S [A "-ccopt"; A "-O2"; A "-ccopt"; A "${XEN_CFLAGS}"])
+            ]);
           (["oasis_executable_crc_test_byte"; "ocaml"; "link"; "byte"],
             [(OASISExpr.EBool true, S [A "-bin-annot"])]);
           (["oasis_executable_crc_test_native"; "ocaml"; "link"; "native"],
@@ -645,6 +651,6 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 649 "myocamlbuild.ml"
+# 655 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
