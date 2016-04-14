@@ -22,6 +22,8 @@ depends: [
   "cstruct" {>= "1.0.1"}
   "ounit" {test}
   "oasis" {build}
+  "ocamlbuild" {build}
+  "ocamlfind" {build}
 ]
 depopts: [
   "mirage-xen"
