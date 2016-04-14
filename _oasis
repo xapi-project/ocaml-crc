@@ -7,7 +7,7 @@ License:      ISC
 Copyrights:   (C) 2013 John Else
 BuildTools:   ocamlbuild
 Plugins:      META (0.3)
-PostConfCommand: ocaml postconf.ml
+PostConfCommand: ./postconf.sh
 
 Flag xen
   Description:        Build Xen support
