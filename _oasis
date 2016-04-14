@@ -1,6 +1,6 @@
 OASISFormat:  0.3
 Name:         crc
-Version:      0.9.0
+Version:      1.0.0
 Synopsis:     CRC library for computing checksums of buffers and strings
 Authors:      John Else
 License:      ISC
@@ -26,7 +26,7 @@ Library crc
 Library crc_xen
   Build$:        flag(xen)
   Path:          lib
-  CSources: 	 crc_stubs_xen.c
+  CSources:      crc_stubs_xen.c
   Findlibparent: crc
   Findlibname:   xen
   CCOpt:         -O2 $XEN_CFLAGS
