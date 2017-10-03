@@ -1,12 +1,3 @@
-*.swp
-
-api.docdir
 _build
-oUnit-anon.cache
-setup.data
-setup.log
-
-crc_test.byte
-
-travis-coveralls.sh
-.coverage/
+.merlin
+*.install
