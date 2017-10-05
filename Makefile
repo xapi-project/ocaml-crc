@@ -1,41 +1,25 @@
-all: build
+.PHONY: build release install uninstall clean test doc reindent
 
-TESTS_FLAG=--enable-tests
+build:
+	jbuilder build @install --dev
 
-NAME=crc
-J=4
+release:
+	jbuilder build @install
 
-LIBDIR=_build/lib
-
-setup.data: setup.ml
-	ocaml setup.ml -configure $(TESTS_FLAG)
-
-build: setup.data setup.ml
-	ocaml setup.ml -build -j $(J)
-
-doc: setup.data setup.ml
-	ocaml setup.ml -doc -j $(J)
-
-install: setup.data setup.ml
-	ocaml setup.ml -install
+install:
+	jbuilder install
 
 uninstall:
-	ocamlfind remove $(NAME)
-
-test: setup.ml build
-	LD_LIBRARY_PATH=$(LIBDIR):$(LD_LIBRARY_PATH) ./crc_test.byte -runner sequential
-#	ocaml setup.ml -test
-
-reinstall: setup.ml
-	ocamlfind remove $(NAME) || true
-	ocaml setup.ml -reinstall
+	jbuilder uninstall
 
 clean:
-	ocamlbuild -clean
-	rm -f setup.data setup.log
+	jbuilder clean
 
-travis-coveralls.sh:
-	wget https://raw.githubusercontent.com/simonjbeaumont/ocaml-travis-coveralls/master/$@
+test:
+	jbuilder runtest
 
-coverage: travis-coveralls.sh
-	bash $<
+doc:
+	jbuilder build @doc
+
+reindent:
+	ocp-indent -i **/*.ml*
