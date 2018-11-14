@@ -1,0 +1,37 @@
+(* -*- tuareg -*- *)
+
+let flags_gen = function
+  | [] -> ""
+  | pkgs ->
+    let cmd = "ocamlfind ocamlc -verbose" ^ (
+        List.fold_left (fun acc pkg -> acc ^ " -package " ^ pkg) "" pkgs
+        )
+    in
+    Jbuild_plugin.V1.run_and_read_lines (cmd ^ " | grep -oEe '-ppx (\"([^\"\\]|\\.)+\"|\\w+)'")
+    |> String.concat " "
+
+let flags = flags_gen ["ppx_deriving_rpc"; "ppx_sexp_conv"]
+
+let coverage_rewriter =
+  let bisect = Jbuild_plugin.V1.run_and_read_lines "echo ${BISECT_ENABLE}"
+    |> String.concat ""
+  in
+  if bisect = "YES" then
+    "(preprocess (pps bisect_ppx -conditional))"
+  else
+    ""
+
+let () = Printf.ksprintf Jbuild_plugin.V1.send {|
+(executable
+  (name crc_test)
+  (flags (:standard -w -39 %s))
+  (libraries oUnit crc)
+  %s
+)
+
+(alias
+  (name runtest)
+  (deps (:x crc_test.exe))
+  (action (run %%{x} -runner sequential))
+)
+|} flags coverage_rewriter
