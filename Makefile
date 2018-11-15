@@ -1,25 +1,25 @@
 .PHONY: build release install uninstall clean test doc reindent
 
 build:
-	jbuilder build @install --dev
+	dune build @install
 
 release:
-	jbuilder build @install
+	dune build -p crc -j $$(getconf _NPROCESSORS_ONLN)
 
 install:
-	jbuilder install
+	dune install -p crc
 
 uninstall:
-	jbuilder uninstall
+	dune uninstall -p crc
 
 clean:
-	jbuilder clean
+	dune clean
 
 test:
-	jbuilder runtest
+	dune runtest
 
 doc:
-	jbuilder build @doc
+	dune build @doc -profile=release
 
 reindent:
 	ocp-indent -i **/*.ml*
