@@ -24,7 +24,7 @@ let coverage_rewriter =
 let () = Printf.ksprintf Jbuild_plugin.V1.send {|
 (executable
   (name crc_test)
-  (flags (:standard -w -39 %s))
+  (flags (:standard %s))
   (libraries oUnit crc)
   %s
 )

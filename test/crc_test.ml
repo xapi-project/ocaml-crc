@@ -105,7 +105,7 @@ let update_crc_tests = [
 	"[12pl34.", ",2l3\n\t", 1481911597l;
 ]
 
-let test_crc_update_string data_first data_second expected_crc =
+let test_crc_update_string data_first data_second =
 	let data_all = data_first ^ data_second in
 	let crc_all = Crc32.string data_all 0 (String.length data_all) in
 
@@ -118,7 +118,7 @@ let test_crc_update_string data_first data_second expected_crc =
 
 	assert_equal crc_all crc_parts
 
-let test_crc_update_cstruct data_first data_second expected_crc =
+let test_crc_update_cstruct data_first data_second =
 	let cstruct_all = Cstruct.of_string (data_first ^ data_second) in
 	let cstruct_first = Cstruct.of_string data_first in
 	let cstruct_second = Cstruct.of_string data_second in
@@ -132,7 +132,7 @@ let test_crc_update_cstruct data_first data_second expected_crc =
 let suite_test_crc_update =
 	let make_tests test_fn test_base_name =
 		List.map
-			(fun (test_string_first, test_string_second, expected_crc) ->
+			(fun (test_string_first, test_string_second, _) ->
 				let test_name =
 					Printf.sprintf
 						"%s: \"%s\",\"%s\""
@@ -142,7 +142,7 @@ let suite_test_crc_update =
 				in
 				test_name >::
 					(fun () -> test_fn
-							test_string_first test_string_second expected_crc))
+							test_string_first test_string_second))
 			update_crc_tests
 	in
 	"suite_test_crc_update" >:::
