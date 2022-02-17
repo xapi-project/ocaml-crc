@@ -5,6 +5,7 @@ homepage: "https://github.com/xapi-project/ocaml-crc"
 bug-reports: "https://github.com/xapi-project/ocaml-crc/issues"
 dev-repo: "git+https://github.com/xapi-project/ocaml-crc"
 maintainer: "xen-api@lists.xen.org"
+license: "ISC"
 build: [[ "dune" "build" "-p" name ]]
 run-test: [[ "dune" "runtest" "-p" name "-j" jobs ]]
 depends: [
