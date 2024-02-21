@@ -94,7 +94,7 @@ CAMLprim value crc32_cstruct(
 
     unsigned char* data;
 
-    data = (unsigned char*) Data_bigarray_val(buffer);
+    data = (unsigned char*) Caml_ba_data_val(buffer);
     data += Int_val(offset);
 
     result = caml_copy_int32(crc32(Int32_val(crc), data, Int_val(length)));
