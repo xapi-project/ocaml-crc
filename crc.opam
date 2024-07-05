@@ -12,8 +12,6 @@ depends: [
   "cstruct" {>= "1.0.1"}
   "ounit2" {with-test}
   "odoc" {with-doc}
-  "ppx_deriving_rpc"
-  "ppx_sexp_conv" {>= "v0.11.0"}
 ]
 build: [[ "dune" "build" "-p" name ]]
 run-test: [[ "dune" "runtest" "-p" name "-j" jobs ]]

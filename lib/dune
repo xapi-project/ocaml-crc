@@ -4,5 +4,4 @@
   (flags (:standard))
   (c_names crc_stubs)
   (libraries cstruct)
-  (preprocess (pps ppx_deriving_rpc ppx_sexp_conv))
 )
